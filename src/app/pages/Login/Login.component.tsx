@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { LoginContainer, Form, Input, Button, FooterText } from './Login.styles'
-import { api } from '../../../shared/services/api'
+import { login } from '../../../shared/services/auth'
 
 const loginSchema = z.object({
-  username: z.string().min(1, 'Usuário obrigatório'),
+  email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
 })
 
@@ -15,7 +15,6 @@ type LoginFormInputs = z.infer<typeof loginSchema>
 
 const Login: React.FC = () => {
   const navigate = useNavigate()
-
   const {
     register,
     handleSubmit,
@@ -26,11 +25,10 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await api.post('/login', data)
+      await login(data.email, data.password)
       navigate('/chat')
-    } catch (err) {
-      console.error(err)
-      alert('Erro ao logar')
+    } catch (error) {
+      console.error('Login falhou', error)
     }
   }
 
@@ -38,15 +36,17 @@ const Login: React.FC = () => {
     <LoginContainer>
       <h1>Chat LICITEM</h1>
       <h2>Entre na sua conta</h2>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input placeholder="Usuário" {...register('username')} />
-        {errors.username && <p>{errors.username.message}</p>}
 
-        <Input placeholder="Senha" type="password" {...register('password')} />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input type="text" placeholder="Email" {...register('email')} />
+        {errors.email && <p>{errors.email.message}</p>}
+
+        <Input type="password" placeholder="Senha" {...register('password')} />
         {errors.password && <p>{errors.password.message}</p>}
 
         <Button type="submit">Entrar</Button>
       </Form>
+
       <FooterText onClick={() => navigate('/register')}>
         Não tem conta? Registre-se
       </FooterText>

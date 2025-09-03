@@ -10,9 +10,10 @@ import {
   Button,
   FooterText,
 } from './Register.styles'
-import { api } from '../../../shared/services/api'
+import { register as registerUser } from '../../../shared/services/auth'
 
 const registerSchema = z.object({
+  email: z.string().email('Email inválido'),
   username: z.string().min(1, 'Usuário obrigatório'),
   password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
 })
@@ -31,26 +32,29 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
-      await api.post('/register', data) // seu endpoint de registro
+      await registerUser(data.email, data.password, data.username)
       navigate('/')
-    } catch (err) {
-      console.error(err)
-      alert('Erro ao registrar')
+    } catch (error) {
+      console.error('Registro falhou', error)
     }
   }
 
   return (
     <RegisterContainer>
-      <h1>Registre-se no Chat LICITEM</h1>
+      <h1>Registre-se</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input placeholder="Usuário" {...register('username')} />
+        <Input type="text" placeholder="Email" {...register('email')} />
+        {errors.email && <p>{errors.email.message}</p>}
+
+        <Input type="text" placeholder="Usuário" {...register('username')} />
         {errors.username && <p>{errors.username.message}</p>}
 
-        <Input placeholder="Senha" type="password" {...register('password')} />
+        <Input type="password" placeholder="Senha" {...register('password')} />
         {errors.password && <p>{errors.password.message}</p>}
 
         <Button type="submit">Registrar</Button>
       </Form>
+
       <FooterText onClick={() => navigate('/')}>
         Já tem conta? Faça login
       </FooterText>

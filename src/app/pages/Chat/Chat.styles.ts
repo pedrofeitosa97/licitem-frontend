@@ -1,47 +1,65 @@
 import styled from 'styled-components'
 
 export const ChatContainer = styled.div`
-  background: #0a0a0a;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  color: #ffffff;
+  align-items: center;
+  padding: 2rem;
+  background: #0a0a0a;
+  min-height: 100vh;
+  color: #fff;
 `
 
-export const MessagesContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
+export const RoomList = styled.div`
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 400px;
+`
+
+export const RoomItem = styled.div`
+  padding: 1rem;
+  margin-bottom: 0.5rem;
   background: rgba(20, 20, 20, 0.8);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 20px;
-`
-
-export const MessageInput = styled.input`
-  padding: 10px 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(147, 51, 234, 0.3);
-  background: #111111;
-  color: #ffffff;
-  font-size: 16px;
-  margin-bottom: 10px;
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(147, 51, 234, 0.6);
-  }
-`
-
-export const Button = styled.button`
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  background: #9333ea;
-  color: #ffffff;
-  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s;
   &:hover {
-    background: #a855f7;
+    background: rgba(147, 51, 234, 0.3);
   }
+`
+
+export const Button = styled.button<{ destructive?: boolean }>`
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: ${({ destructive }) => (destructive ? '#ef4444' : '#9333ea')};
+  color: #fff;
+  font-weight: bold;
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+export const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(20, 20, 20, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+export const Input = styled.input`
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  background: #111;
+  color: #fff;
+  width: 100%;
 `

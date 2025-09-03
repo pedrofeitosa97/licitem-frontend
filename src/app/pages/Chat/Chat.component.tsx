@@ -1,54 +1,81 @@
 import React, { useEffect, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { useNavigate } from 'react-router-dom'
 import {
   ChatContainer,
-  MessagesContainer,
-  MessageInput,
+  RoomList,
+  RoomItem,
   Button,
+  Modal,
+  Input,
 } from './Chat.styles'
 import { api } from '../../../shared/services/api'
-interface Message {
-  user: string
-  text: string
+
+interface Room {
+  id: string
+  name: string
 }
 
-const socket: Socket = io('http://localhost:3000')
-
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [text, setText] = useState('')
+  const navigate = useNavigate()
+  const [rooms, setRooms] = useState<Room[]>([])
+  const [showModal, setShowModal] = useState(false)
+  const [newRoomName, setNewRoomName] = useState('')
 
   useEffect(() => {
-    socket.on('message', (msg: Message) => {
-      setMessages((prev) => [...prev, msg])
-    })
-
-    return () => {
-      socket.off('message')
-    }
+    fetchRooms()
   }, [])
 
-  const sendMessage = async () => {
-    if (!text) return
-    await api.post('/messages', {
-      roomId: 'default',
-      sender: 'user1',
-      content: text,
-    })
-    setText('')
+  const fetchRooms = async () => {
+    const res = await api.get('/rooms')
+    setRooms(res.data)
+  }
+
+  const handleCreateRoom = async () => {
+    if (!newRoomName) return
+    const res = await api.post('/rooms', { name: newRoomName })
+    setRooms((prev) => [...prev, res.data])
+    setNewRoomName('')
+    setShowModal(false)
+  }
+
+  const handleEnterRoom = (roomId: string) => {
+    navigate(`/chat/${roomId}`)
+  }
+
+  const handleLogout = () => {
+    navigate('/')
   }
 
   return (
     <ChatContainer>
-      <MessagesContainer>
-        {messages.map((msg, i) => (
-          <div key={i}>
-            <strong>{msg.user}:</strong> {msg.text}
-          </div>
+      <h1>Salas de Chat</h1>
+      <Button onClick={() => setShowModal(true)}>Criar Sala</Button>
+      <Button onClick={handleLogout} destructive>
+        Sair
+      </Button>
+
+      <RoomList>
+        {rooms.map((room) => (
+          <RoomItem key={room.id} onClick={() => handleEnterRoom(room.id)}>
+            {room.name}
+          </RoomItem>
         ))}
-      </MessagesContainer>
-      <MessageInput value={text} onChange={(e) => setText(e.target.value)} />
-      <Button onClick={sendMessage}>Enviar</Button>
+      </RoomList>
+
+      {showModal && (
+        <Modal>
+          <h2>Criar Sala</h2>
+          <Input
+            placeholder="Nome da sala"
+            value={newRoomName}
+            onChange={(e) => setNewRoomName(e.target.value)}
+          />
+          <Button onClick={handleCreateRoom}>Criar</Button>
+          <Button onClick={() => setShowModal(false)} destructive>
+            Cancelar
+          </Button>
+        </Modal>
+      )}
     </ChatContainer>
   )
 }
