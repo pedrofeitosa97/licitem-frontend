@@ -35,17 +35,11 @@ export const Input = styled.input`
   color: #ffffff;
 `
 
-export const Button = styled.button<{ destructive?: boolean }>`
-  padding: 10px 20px;
-  margin-left: 10px;
-  border-radius: 8px;
+export const Button = styled.button<{ $destructive?: boolean }>`
+  background: ${(props) => (props.$destructive ? 'red' : '#333')};
+  color: white;
+  padding: 8px 16px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  background: ${(props) => (props.destructive ? '#ef4444' : '#9333ea')};
-  color: #fff;
-  font-weight: bold;
-
-  &:hover {
-    opacity: 0.9;
-  }
 `

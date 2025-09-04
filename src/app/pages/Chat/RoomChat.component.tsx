@@ -25,6 +25,8 @@ const RoomChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
 
+  const username = localStorage.getItem('username') || 'Desconhecido'
+
   const fetchMessages = useCallback(async () => {
     if (!roomId) return
     try {
@@ -39,13 +41,15 @@ const RoomChat: React.FC = () => {
     if (!roomId) return
 
     fetchMessages()
-
     socket.emit('joinRoom', roomId)
 
     const handleNewMessage = (msg: Message) => {
-      console.log('Mensagem recebida via socket:', msg)
       if (msg.roomId === roomId) {
-        setMessages((prev) => [...prev, msg])
+        setMessages((prev) => {
+          // Evita duplicadas
+          if (prev.find((m) => m.id === msg.id)) return prev
+          return [...prev, msg]
+        })
       }
     }
 
@@ -56,17 +60,13 @@ const RoomChat: React.FC = () => {
     }
   }, [roomId, fetchMessages])
 
+  // Enviar mensagem
   const handleSendMessage = async () => {
     if (!newMessage || !roomId) return
-
-    const msg = { roomId, user: 'Pedro', message: newMessage }
+    const msg = { roomId, sender: username, content: newMessage }
 
     try {
-      await api.post('/messages', {
-        roomId,
-        sender: 'Pedro',
-        content: newMessage,
-      })
+      await api.post('/messages', msg)
 
       socket.emit('sendMessage', msg)
 
@@ -83,9 +83,7 @@ const RoomChat: React.FC = () => {
   return (
     <RoomChatContainer>
       <h1>Sala: {roomId}</h1>
-      <Button destructive onClick={handleLeaveRoom}>
-        Sair da sala
-      </Button>
+      <Button onClick={handleLeaveRoom}>Sair da sala</Button>
 
       <MessagesList>
         {messages.map((msg) => (
