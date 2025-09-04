@@ -11,6 +11,7 @@ import {
 } from './RoomChat.styles'
 import socket from '../../../../shared/services/socket'
 import { api } from '../../../../shared/services/api'
+import { FiLoader } from 'react-icons/fi'
 
 interface Message {
   id: string
@@ -25,6 +26,7 @@ const RoomChat: React.FC = () => {
   const navigate = useNavigate()
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
+  const [isSending, setIsSending] = useState(false)
 
   const username = localStorage.getItem('username') || 'Desconhecido'
 
@@ -47,7 +49,6 @@ const RoomChat: React.FC = () => {
     const handleNewMessage = (msg: Message) => {
       if (msg.roomId === roomId) {
         setMessages((prev) => {
-          // Evita duplicadas
           if (prev.find((m) => m.id === msg.id)) return prev
           return [...prev, msg]
         })
@@ -61,19 +62,20 @@ const RoomChat: React.FC = () => {
     }
   }, [roomId, fetchMessages])
 
-  // Enviar mensagem
   const handleSendMessage = async () => {
     if (!newMessage || !roomId) return
+
     const msg = { roomId, sender: username, content: newMessage }
+    setIsSending(true)
 
     try {
       await api.post('/messages', msg)
-
       socket.emit('sendMessage', msg)
-
       setNewMessage('')
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err)
+    } finally {
+      setIsSending(false)
     }
   }
 
@@ -103,7 +105,9 @@ const RoomChat: React.FC = () => {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
         />
-        <Button onClick={handleSendMessage}>Enviar</Button>
+        <Button onClick={handleSendMessage} disabled={isSending}>
+          {isSending ? <FiLoader className="spin" /> : 'Enviar'}
+        </Button>
       </SendMessageContainer>
     </RoomChatContainer>
   )
