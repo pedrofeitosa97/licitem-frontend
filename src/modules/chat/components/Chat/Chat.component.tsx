@@ -8,6 +8,7 @@ import {
   Modal,
   Input,
   HeaderButtons,
+  ModalOverlay,
 } from './Chat.styles'
 import { api } from '../../../../shared/services/api'
 import { toast } from 'react-toastify'
@@ -68,18 +69,36 @@ const Chat: React.FC = () => {
       </RoomList>
 
       {showModal && (
-        <Modal>
-          <h2>Criar Sala</h2>
-          <Input
-            placeholder="Nome da sala"
-            value={newRoomName}
-            onChange={(e) => setNewRoomName(e.target.value)}
-          />
-          <Button onClick={handleCreateRoom}>Criar</Button>
-          <Button onClick={() => setShowModal(false)} destructive>
-            Cancelar
-          </Button>
-        </Modal>
+        <ModalOverlay>
+          <Modal>
+            <h2>Criar Sala</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleCreateRoom()
+              }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+              }}
+            >
+              <Input
+                placeholder="Nome da sala"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+              />
+              <Button type="submit">Criar</Button>
+              <Button
+                type="button"
+                onClick={() => setShowModal(false)}
+                destructive
+              >
+                Cancelar
+              </Button>
+            </form>
+          </Modal>
+        </ModalOverlay>
       )}
     </ChatContainer>
   )

@@ -80,7 +80,7 @@ export const Button = styled.button<{ destructive?: boolean }>`
   margin: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  width: 200px;
+  width: 100%;
   border: none;
   cursor: pointer;
   background: ${({ destructive }) => (destructive ? 'transparent' : '#9333ea')};
@@ -93,17 +93,40 @@ export const Button = styled.button<{ destructive?: boolean }>`
   }
 `
 
-export const Modal = styled.div`
+export const ModalOverlay = styled.div`
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px); /* desfoca o fundo */
+  background: rgba(0, 0, 0, 0.4); /* sombra escura atrás do modal */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`
+
+export const Modal = styled.div`
   background: rgba(20, 20, 20, 0.95);
   padding: 2rem;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 400px;
+
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeIn 0.08s forwards;
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 `
 
 export const Input = styled.input`
