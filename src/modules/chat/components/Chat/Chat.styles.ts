@@ -21,7 +21,6 @@ export const ChatContainer = styled.div`
 
 export const HeaderButtons = styled.div`
   display: flex;
-  width: 100%;
   max-width: 400px;
   justify-content: space-between;
 `
@@ -35,9 +34,15 @@ export const RoomList = styled.div`
 export const RoomItem = styled.div`
   padding: 1rem;
   margin-bottom: 0.5rem;
+  min-height: 50px;
   background: rgba(20, 20, 20, 0.8);
   border-radius: 8px;
   cursor: pointer;
+
+  &:first-child {
+    margin-top: 0.5rem;
+  }
+
   &:hover {
     background: rgba(147, 51, 234, 0.3);
   }
