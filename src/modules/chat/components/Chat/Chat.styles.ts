@@ -5,9 +5,25 @@ export const ChatContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background: #0a0a0a;
-  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(41, 5, 75, 0.9) 0%,
+    rgba(10, 10, 10, 1) 100%
+  );
+
+  height: 100vh;
   color: #fff;
+
+  h1 {
+    padding: 20px;
+  }
+`
+
+export const HeaderButtons = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+  justify-content: space-between;
 `
 
 export const RoomList = styled.div`
@@ -31,9 +47,12 @@ export const Button = styled.button<{ destructive?: boolean }>`
   margin: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 8px;
+  width: 200px;
   border: none;
   cursor: pointer;
-  background: ${({ destructive }) => (destructive ? '#ef4444' : '#9333ea')};
+  background: ${({ destructive }) => (destructive ? 'transparent' : '#9333ea')};
+  border: ${({ destructive }) =>
+    destructive ? '2px solid #bb7bf7ff' : 'none'};
   color: #fff;
   font-weight: bold;
   &:hover {

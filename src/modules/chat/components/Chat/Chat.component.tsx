@@ -7,8 +7,9 @@ import {
   Button,
   Modal,
   Input,
+  HeaderButtons,
 } from './Chat.styles'
-import { api } from '../../../shared/services/api'
+import { api } from '../../../../shared/services/api'
 
 interface Room {
   id: string
@@ -48,11 +49,13 @@ const Chat: React.FC = () => {
 
   return (
     <ChatContainer>
-      <h1>Salas de Chat</h1>
-      <Button onClick={() => setShowModal(true)}>Criar Sala</Button>
-      <Button onClick={handleLogout} destructive>
-        Sair
-      </Button>
+      <h1>SALAS DISPONÍVEIS</h1>
+      <HeaderButtons>
+        <Button onClick={() => setShowModal(true)}>Criar Sala</Button>
+        <Button onClick={handleLogout} destructive>
+          Sair
+        </Button>
+      </HeaderButtons>
 
       <RoomList>
         {rooms.map((room) => (

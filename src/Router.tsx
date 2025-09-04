@@ -1,9 +1,9 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Login from './app/pages/Login/Login.component'
-import Register from './app/pages/Register/Register.component'
-import Chat from './app/pages/Chat/Chat.component'
-import RoomChat from './app/pages/Chat/RoomChat.component'
+import Login from './modules/app/components/Login/Login.component'
+import Register from './modules/app/components/Register/Register.component'
+import Chat from './modules/app/components/Chat/Chat.component'
+import RoomChat from './modules/app/components/Chat/RoomChat.component'
 
 const AppRoutes: React.FC = () => (
   <BrowserRouter>

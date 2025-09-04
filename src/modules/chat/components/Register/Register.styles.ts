@@ -34,6 +34,7 @@ export const Button = styled.button`
   border-radius: 5px;
   border: none;
   cursor: pointer;
+  margin-top: 4rem;
 `
 
 export const FooterText = styled.div`
@@ -43,4 +44,11 @@ export const FooterText = styled.div`
   &:hover {
     text-decoration: underline;
   }
+`
+
+export const ErrorMessage = styled.p`
+  color: #cdacf7ff;
+  font-size: 0.8rem;
+  margin: 0px 0 8px;
+  font-weight: 500;
 `

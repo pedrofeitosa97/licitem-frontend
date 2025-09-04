@@ -7,9 +7,10 @@ import {
   MessageItem,
   Input,
   Button,
+  SendMessageContainer,
 } from './RoomChat.styles'
-import socket from '../../../shared/services/socket'
-import { api } from '../../../shared/services/api'
+import socket from '../../../../shared/services/socket'
+import { api } from '../../../../shared/services/api'
 
 interface Message {
   id: string
@@ -82,8 +83,10 @@ const RoomChat: React.FC = () => {
 
   return (
     <RoomChatContainer>
-      <h1>Sala: {roomId}</h1>
-      <Button onClick={handleLeaveRoom}>Sair da sala</Button>
+      <header>
+        <h1>Sala: {roomId}</h1>
+        <Button onClick={handleLeaveRoom}>Sair da sala</Button>
+      </header>
 
       <MessagesList>
         {messages.map((msg) => (
@@ -93,7 +96,7 @@ const RoomChat: React.FC = () => {
         ))}
       </MessagesList>
 
-      <div>
+      <SendMessageContainer>
         <Input
           placeholder="Digite sua mensagem"
           value={newMessage}
@@ -101,7 +104,7 @@ const RoomChat: React.FC = () => {
           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
         />
         <Button onClick={handleSendMessage}>Enviar</Button>
-      </div>
+      </SendMessageContainer>
     </RoomChatContainer>
   )
 }

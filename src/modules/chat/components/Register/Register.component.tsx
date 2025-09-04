@@ -9,8 +9,9 @@ import {
   Input,
   Button,
   FooterText,
+  ErrorMessage,
 } from './Register.styles'
-import { register as registerUser } from '../../../shared/services/auth'
+import { register as registerUser } from '../../../../shared/services/auth'
 
 const registerSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -44,13 +45,19 @@ const Register: React.FC = () => {
       <h1>Registre-se</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input type="text" placeholder="Email" {...register('email')} />
-        {errors.email && <p>{errors.email.message}</p>}
+        <ErrorMessage>
+          {errors.email && <p>{errors.email.message}</p>}
+        </ErrorMessage>
 
         <Input type="text" placeholder="Usuário" {...register('username')} />
-        {errors.username && <p>{errors.username.message}</p>}
+        <ErrorMessage>
+          {errors.username && <p>{errors.username.message}</p>}
+        </ErrorMessage>
 
         <Input type="password" placeholder="Senha" {...register('password')} />
-        {errors.password && <p>{errors.password.message}</p>}
+        <ErrorMessage>
+          {errors.password && <p>{errors.password.message}</p>}
+        </ErrorMessage>
 
         <Button type="submit">Registrar</Button>
       </Form>

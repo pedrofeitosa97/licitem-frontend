@@ -3,8 +3,15 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { LoginContainer, Form, Input, Button, FooterText } from './Login.styles'
-import { login } from '../../../shared/services/auth'
+import {
+  LoginContainer,
+  Form,
+  Input,
+  Button,
+  FooterText,
+  ErrorMessage,
+} from './Login.styles'
+import { login } from '../../../../shared/services/auth'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -39,10 +46,14 @@ const Login: React.FC = () => {
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input type="text" placeholder="Email" {...register('email')} />
-        {errors.email && <p>{errors.email.message}</p>}
+        <ErrorMessage>
+          {errors.email && <p>{errors.email.message}</p>}
+        </ErrorMessage>
 
         <Input type="password" placeholder="Senha" {...register('password')} />
-        {errors.password && <p>{errors.password.message}</p>}
+        <ErrorMessage>
+          {errors.password && <p>{errors.password.message}</p>}
+        </ErrorMessage>
 
         <Button type="submit">Entrar</Button>
       </Form>

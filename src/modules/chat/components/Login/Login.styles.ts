@@ -6,7 +6,13 @@ export const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+
+  h2 {
+    padding: 20px;
+  }
 `
 
 export const Form = styled.form`
@@ -37,4 +43,11 @@ export const FooterText = styled.p`
   margin-top: 20px;
   color: #a855f7;
   cursor: pointer;
+`
+
+export const ErrorMessage = styled.p`
+  color: #cdacf7ff;
+  font-size: 0.8rem;
+  margin: 0px 0 8px;
+  font-weight: 500;
 `
