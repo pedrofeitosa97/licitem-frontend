@@ -23,23 +23,37 @@ const Chat: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([])
   const [showModal, setShowModal] = useState(false)
   const [newRoomName, setNewRoomName] = useState('')
+  const [isCreating, setIsCreating] = useState(false) // bloqueia múltiplos envios
 
   useEffect(() => {
     fetchRooms()
   }, [])
 
   const fetchRooms = async () => {
-    const res = await api.get('/rooms')
-    setRooms(res.data)
+    try {
+      const res = await api.get('/rooms')
+      setRooms(res.data)
+    } catch (err) {
+      console.log(err)
+      toast.error('Erro ao carregar salas.')
+    }
   }
 
   const handleCreateRoom = async () => {
-    if (!newRoomName) return
-    const res = await api.post('/rooms', { name: newRoomName })
-    setRooms((prev) => [...prev, res.data])
-    setNewRoomName('')
-    setShowModal(false)
-    toast.success('Sala criada com sucesso!')
+    if (!newRoomName || isCreating) return
+    setIsCreating(true)
+    try {
+      const res = await api.post('/rooms', { name: newRoomName })
+      setRooms((prev) => [...prev, res.data])
+      setNewRoomName('')
+      setShowModal(false)
+      toast.success('Sala criada com sucesso!')
+    } catch (err) {
+      console.log(err)
+      toast.error('Erro ao criar a sala.')
+    } finally {
+      setIsCreating(false)
+    }
   }
 
   const handleEnterRoom = (roomId: string) => {
@@ -53,6 +67,7 @@ const Chat: React.FC = () => {
   return (
     <ChatContainer>
       <h1>SALAS DISPONÍVEIS</h1>
+
       <HeaderButtons>
         <Button onClick={() => setShowModal(true)}>Criar Sala</Button>
         <Button onClick={handleLogout} destructive>
@@ -88,7 +103,11 @@ const Chat: React.FC = () => {
                 value={newRoomName}
                 onChange={(e) => setNewRoomName(e.target.value)}
               />
-              <Button type="submit">Criar</Button> {/* Sem onClick */}
+
+              <Button type="submit" disabled={isCreating}>
+                {isCreating ? 'Criando...' : 'Criar'}
+              </Button>
+
               <Button
                 type="button"
                 onClick={() => setShowModal(false)}
