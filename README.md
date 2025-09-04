@@ -1,69 +1,53 @@
-# React + TypeScript + Vite
+📌 README — Licitem Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dependências:
 
-Currently, two official plugins are available:
+- Node 18+
+- React 18 + Vite
+- Typescript
+- Axios
+- React Router DOM
+- Socket.IO Client
+- jwt-decode
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Arquitetura:
 
-## Expanding the ESLint configuration
+O front-end segue uma organização em módulos de feature e serviços compartilhados, garantindo escalabilidade e fácil manutenção.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── modules
+│   └── chat
+│       └── components // Componentes específicos (RoomChat, etc.)
+├── shared
+│   ├── services // axios (api.ts), socket, auth.ts
+│   └── styles   // estilos globais
+└── main.tsx     // ponto de entrada da aplicação
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Fluxo de Autenticação (Firebase):
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+O usuário faz login via /auth/login no backend.
+O backend autentica no Firebase e retorna:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+idToken
+refreshToken
+displayName
+uid
+
+O front armazena o idToken e displayName no localStorage.
+O idToken é enviado no header Authorization: Bearer <idToken> em todas as requisições.
+O displayName é usado para exibir o username no chat.
+No Socket.IO, o idToken também é enviado no handshake (auth.token).
+
+Rodando o projeto:
 ```
+npm install
+npm run dev
+```
+Principais Funcionalidades:
+
+- Autenticação com Firebase (via backend).
+- Chat em tempo real com Socket.IO.
+- Renderização do nome do usuário logado.
+- Estrutura modularizada para escalabilidade.
