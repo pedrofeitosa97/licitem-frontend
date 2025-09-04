@@ -58,10 +58,10 @@ const RoomChat: React.FC = () => {
   }, [roomId])
 
   const handleSendMessage = async () => {
-    if (!newMessage || !roomId) return
+    if (!newMessage || !roomId || isSending) return
+    setIsSending(true)
 
     const msg = { roomId, sender: username, content: newMessage }
-    setIsSending(true)
 
     try {
       await api.post('/messages', msg)
@@ -98,9 +98,15 @@ const RoomChat: React.FC = () => {
           placeholder="Digite sua mensagem"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              if (!isSending) handleSendMessage()
+            }
+          }}
         />
-        <Button onClick={handleSendMessage} disabled={isSending}>
+
+        <Button onClick={handleSendMessage} disabled={isSending || !newMessage}>
           {isSending ? <FiLoader className="spin" /> : 'Enviar'}
         </Button>
       </SendMessageContainer>
