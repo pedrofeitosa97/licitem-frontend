@@ -12,6 +12,7 @@ import {
   ErrorMessage,
 } from './Register.styles'
 import { register as registerUser } from '../../../../shared/services/auth'
+import { toast } from 'react-toastify'
 
 const registerSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -35,8 +36,10 @@ const Register: React.FC = () => {
     try {
       await registerUser(data.email, data.password, data.username)
       navigate('/')
+      toast.success('Registro bem-sucedido! Faça login.')
     } catch (error) {
       console.error('Registro falhou', error)
+      toast.error('Erro ao registrar. Tente novamente.')
     }
   }
 
