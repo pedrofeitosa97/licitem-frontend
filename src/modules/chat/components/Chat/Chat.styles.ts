@@ -15,12 +15,14 @@ export const ChatContainer = styled.div`
   color: #fff;
 
   h1 {
+    font-size: 18px;
     padding: 20px;
   }
 `
 
 export const HeaderButtons = styled.div`
   display: flex;
+  width: 100%;
   max-width: 400px;
   justify-content: space-between;
 `

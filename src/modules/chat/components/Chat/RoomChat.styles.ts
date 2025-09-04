@@ -14,6 +14,10 @@ export const RoomChatContainer = styled.div`
     align-items: center;
     margin-bottom: 20px;
   }
+
+  h1 {
+    font-size: 20px;
+  }
 `
 
 export const MessagesList = styled.div`
@@ -40,18 +44,18 @@ export const Input = styled.input`
   outline: none;
   background: #1a1a1a;
   color: #ffffff;
-  height: 60px;
+  height: 40px;
 `
 
 export const Button = styled.button<{ $destructive?: boolean }>`
   background: ${(props) => (props.$destructive ? 'red' : '#9333ea')};
   color: white;
-  width: 200px;
+  width: 140px;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  height: 60px;
+  height: 40px;
 `
 
 export const SendMessageContainer = styled.div`
