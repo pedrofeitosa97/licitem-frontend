@@ -88,7 +88,7 @@ const Chat: React.FC = () => {
                 value={newRoomName}
                 onChange={(e) => setNewRoomName(e.target.value)}
               />
-              <Button type="submit">Criar</Button>
+              <Button type="submit">Criar</Button> {/* Sem onClick */}
               <Button
                 type="button"
                 onClick={() => setShowModal(false)}
