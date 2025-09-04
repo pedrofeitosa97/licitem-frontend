@@ -1,5 +1,5 @@
 // RoomChat.component.tsx
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   RoomChatContainer,
@@ -30,21 +30,14 @@ const RoomChat: React.FC = () => {
 
   const username = localStorage.getItem('username') || 'Desconhecido'
 
-  const fetchMessages = useCallback(async () => {
-    if (!roomId) return
-    try {
-      const res = await api.get<Message[]>(`/messages/${roomId}`)
-      setMessages(res.data)
-    } catch (err) {
-      console.error('Erro ao buscar mensagens:', err)
-    }
-  }, [roomId])
-
   useEffect(() => {
     if (!roomId) return
 
-    fetchMessages()
     socket.emit('joinRoom', roomId)
+
+    const handleHistory = (msgs: Message[]) => {
+      setMessages(msgs)
+    }
 
     const handleNewMessage = (msg: Message) => {
       if (msg.roomId === roomId) {
@@ -55,12 +48,14 @@ const RoomChat: React.FC = () => {
       }
     }
 
+    socket.on('roomHistory', handleHistory)
     socket.on('message', handleNewMessage)
 
     return () => {
+      socket.off('roomHistory', handleHistory)
       socket.off('message', handleNewMessage)
     }
-  }, [roomId, fetchMessages])
+  }, [roomId])
 
   const handleSendMessage = async () => {
     if (!newMessage || !roomId) return
@@ -70,6 +65,7 @@ const RoomChat: React.FC = () => {
 
     try {
       await api.post('/messages', msg)
+      socket.emit('sendMessage', msg)
       setNewMessage('')
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err)

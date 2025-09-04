@@ -31,6 +31,32 @@ export const RoomList = styled.div`
   margin-top: 1rem;
   width: 100%;
   max-width: 400px;
+  max-height: 600px;
+  flex: 1;
+  overflow: auto;
+
+  /* Scrollbar para Webkit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(20, 20, 20, 0.3);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #9333ea;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #bb7bf7;
+  }
+
+  /* Scrollbar para Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #9333ea rgba(20, 20, 20, 0.3);
 `
 
 export const RoomItem = styled.div`
