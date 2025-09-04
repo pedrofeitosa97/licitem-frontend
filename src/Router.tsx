@@ -1,5 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import Login from './modules/chat/components/Login/Login.component'
 import Register from './modules/chat/components/Register/Register.component'
 import Chat from './modules/chat/components/Chat/Chat.component'
@@ -13,6 +16,18 @@ const AppRoutes: React.FC = () => (
       <Route path="/chat" element={<Chat />} />
       <Route path="/chat/:roomId" element={<RoomChat />} />
     </Routes>
+
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
   </BrowserRouter>
 )
 

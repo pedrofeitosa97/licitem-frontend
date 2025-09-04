@@ -12,6 +12,7 @@ import {
   ErrorMessage,
 } from './Login.styles'
 import { login } from '../../../../shared/services/auth'
+import { toast } from 'react-toastify'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -34,8 +35,10 @@ const Login: React.FC = () => {
     try {
       await login(data.email, data.password)
       navigate('/chat')
+      toast.success('Login realizado com sucesso!')
     } catch (error) {
       console.error('Login falhou', error)
+      toast.error('Falha ao fazer login')
     }
   }
 

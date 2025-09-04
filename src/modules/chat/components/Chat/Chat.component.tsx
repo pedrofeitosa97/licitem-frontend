@@ -10,6 +10,7 @@ import {
   HeaderButtons,
 } from './Chat.styles'
 import { api } from '../../../../shared/services/api'
+import { toast } from 'react-toastify'
 
 interface Room {
   id: string
@@ -37,6 +38,7 @@ const Chat: React.FC = () => {
     setRooms((prev) => [...prev, res.data])
     setNewRoomName('')
     setShowModal(false)
+    toast.success('Sala criada com sucesso!')
   }
 
   const handleEnterRoom = (roomId: string) => {
