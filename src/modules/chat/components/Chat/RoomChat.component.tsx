@@ -70,7 +70,6 @@ const RoomChat: React.FC = () => {
 
     try {
       await api.post('/messages', msg)
-      socket.emit('sendMessage', msg)
       setNewMessage('')
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err)
