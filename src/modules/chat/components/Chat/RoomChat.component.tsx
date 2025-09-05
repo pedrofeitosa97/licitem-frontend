@@ -1,5 +1,4 @@
-// RoomChat.component.tsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   RoomChatContainer,
@@ -27,6 +26,7 @@ const RoomChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
   const username = localStorage.getItem('username') || 'Desconhecido'
 
@@ -56,6 +56,11 @@ const RoomChat: React.FC = () => {
       socket.off('message', handleNewMessage)
     }
   }, [roomId])
+
+  // 🔽 Sempre que messages mudar, rola pro final
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   const handleSendMessage = async () => {
     if (!newMessage || !roomId || isSending) return
@@ -91,6 +96,8 @@ const RoomChat: React.FC = () => {
             <strong>{msg.sender}:</strong> {msg.content}
           </MessageItem>
         ))}
+        {/* 🔽 Esse ref fica no final da lista */}
+        <div ref={messagesEndRef} />
       </MessagesList>
 
       <SendMessageContainer>
