@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -13,6 +13,7 @@ import {
 } from './Login.styles'
 import { login } from '../../../../shared/services/auth'
 import { toast } from 'react-toastify'
+import { FiLoader } from 'react-icons/fi'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -23,6 +24,8 @@ type LoginFormInputs = z.infer<typeof loginSchema>
 
 const Login: React.FC = () => {
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -32,13 +35,18 @@ const Login: React.FC = () => {
   })
 
   const onSubmit = async (data: LoginFormInputs) => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+
     try {
       await login(data.email, data.password)
-      navigate('/chat')
       toast.success('Login realizado com sucesso!')
+      navigate('/chat')
     } catch (error) {
       console.error('Login falhou', error)
       toast.error('Falha ao fazer login')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -58,7 +66,9 @@ const Login: React.FC = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </ErrorMessage>
 
-        <Button type="submit">Entrar</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <FiLoader className="spin" /> : 'Entrar'}
+        </Button>
       </Form>
 
       <FooterText onClick={() => navigate('/register')}>

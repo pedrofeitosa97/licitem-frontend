@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -13,6 +13,7 @@ import {
 } from './Register.styles'
 import { register as registerUser } from '../../../../shared/services/auth'
 import { toast } from 'react-toastify'
+import { FiLoader } from 'react-icons/fi'
 
 const registerSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -24,6 +25,8 @@ type RegisterFormInputs = z.infer<typeof registerSchema>
 
 const Register: React.FC = () => {
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -33,13 +36,18 @@ const Register: React.FC = () => {
   })
 
   const onSubmit = async (data: RegisterFormInputs) => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+
     try {
       await registerUser(data.email, data.password, data.username)
-      navigate('/')
       toast.success('Registro bem-sucedido! Faça login.')
+      navigate('/')
     } catch (error) {
       console.error('Registro falhou', error)
       toast.error('Erro ao registrar. Tente novamente.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -62,7 +70,9 @@ const Register: React.FC = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </ErrorMessage>
 
-        <Button type="submit">Registrar</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <FiLoader className="spin" /> : 'Registrar'}
+        </Button>
       </Form>
 
       <FooterText onClick={() => navigate('/')}>
