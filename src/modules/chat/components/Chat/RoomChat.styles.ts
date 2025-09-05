@@ -1,4 +1,9 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`
 
 export const RoomChatContainer = styled.div`
   display: flex;
@@ -27,6 +32,24 @@ export const MessagesList = styled.div`
   padding: 10px;
   border-radius: 8px;
   background: rgba(20, 20, 20, 0.8);
+
+  /* Scroll custom */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #9333ea;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a855f7;
+  }
 `
 
 export const MessageItem = styled.div`
@@ -56,6 +79,14 @@ export const Button = styled.button<{ $destructive?: boolean }>`
   border-radius: 4px;
   cursor: pointer;
   height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg.spin {
+    animation: ${spin} 1s linear infinite;
+  }
 `
 
 export const SendMessageContainer = styled.div`
